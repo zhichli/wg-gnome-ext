@@ -133,14 +133,6 @@ These are intentionally out of scope to keep the extension simple:
 - Transfer speed graphs / historical stats
 - Multi-user / per-user tunnel isolation
 
-### Alternatives
-
-| Alternative | Pros | Cons |
-|-------------|------|------|
-| [WireGuard Indicator](https://github.com/atareao/wireguard-indicator) (atareao) | ~46k downloads | Battery drain reports, no live stats, limited GNOME version support |
-| NetworkManager native | Zero-extension dependency | Doesn't use wg-quick configs, poor status visibility |
-| CLI (`wg-quick` script) | Full control | No GUI, requires terminal |
-
 ## Contributing
 
 1. Fork the repo
