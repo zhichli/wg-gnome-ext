@@ -1,0 +1,38 @@
+#!/bin/bash
+# wg-manager-helper – Privileged helper for WireGuard Manager GNOME extension.
+# Installed to /usr/local/bin/ and authorized via polkit so that active
+# console sessions can manage WireGuard tunnels without a password prompt.
+set -euo pipefail
+
+# Strict input validation – config names may only contain [a-zA-Z0-9_-]
+validate_name() {
+    if [[ -z "${1:-}" ]] || [[ ! "$1" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+        echo "Invalid config name" >&2
+        exit 1
+    fi
+}
+
+case "${1:-}" in
+    list)
+        # List all WireGuard config basenames in /etc/wireguard/
+        for f in /etc/wireguard/*.conf; do
+            [ -e "$f" ] && basename "$f" .conf
+        done
+        ;;
+    up)
+        validate_name "${2:-}"
+        wg-quick up "$2"
+        ;;
+    down)
+        validate_name "${2:-}"
+        wg-quick down "$2"
+        ;;
+    status)
+        validate_name "${2:-}"
+        wg show "$2" 2>/dev/null || echo "inactive"
+        ;;
+    *)
+        echo "Usage: $0 {list|up|down|status} [config_name]" >&2
+        exit 1
+        ;;
+esac

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.wireguard-manager"
+          path="/org/gnome/shell/extensions/wireguard-manager/">
+
+    <key type="i" name="refresh-interval">
+      <default>5</default>
+      <summary>Refresh interval in seconds</summary>
+      <description>How often to poll WireGuard interface state (1-30 seconds)</description>
+      <range min="1" max="30"/>
+    </key>
+
+    <key type="b" name="show-notifications">
+      <default>true</default>
+      <summary>Show notifications</summary>
+      <description>Show desktop notifications on tunnel connect/disconnect</description>
+    </key>
+
+  </schema>
+</schemalist>

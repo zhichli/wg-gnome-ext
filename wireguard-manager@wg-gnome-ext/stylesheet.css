@@ -1,0 +1,14 @@
+/* WireGuard Manager Extension Styles */
+
+.wg-stats-label {
+    font-family: monospace;
+    font-size: 11px;
+    color: #aaaaaa;
+    padding-left: 24px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+}
+
+.wg-transitioning {
+    opacity: 128;
+}

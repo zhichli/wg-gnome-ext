@@ -1,0 +1,19 @@
+# Compiled schemas (generated)
+wireguard-manager@wg-gnome-ext/schemas/gschemas.compiled
+
+# GNOME Shell logs
+*.log
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip

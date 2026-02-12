@@ -1,0 +1,9 @@
+{
+  "name": "WireGuard Manager",
+  "description": "Toggle WireGuard tunnels from the panel. Auto-detects configs, shows live stats, syncs with CLI usage.",
+  "uuid": "wireguard-manager@wg-gnome-ext",
+  "url": "",
+  "shell-version": ["42", "43", "44", "45", "46"],
+  "version": 1,
+  "settings-schema": "org.gnome.shell.extensions.wireguard-manager"
+}
