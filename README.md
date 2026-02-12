@@ -107,10 +107,39 @@ wg-gnome-ext/
 │   └── org.wireguard.manager.policy   # Polkit policy
 ├── install.sh
 ├── uninstall.sh
-├── spec.md                            # Product specification
 ├── LICENSE
 └── README.md
 ```
+
+## Design Decisions
+
+### Principles
+
+- **Zero-config discovery** – Auto-scans `/etc/wireguard/*.conf`, no manual setup
+- **Minimal, native UX** – Feels like a built-in GNOME system indicator
+- **Safe privilege escalation** – Uses polkit for root ops, never stores credentials
+- **Battery-conscious polling** – Lightweight `ip link` check, configurable interval
+
+### Explicit Non-Goals
+
+These are intentionally out of scope to keep the extension simple:
+
+- Create / edit WireGuard configs from UI
+- NetworkManager integration
+- Import configs from arbitrary paths
+- Split-tunnel / routing rule editor
+- DNS leak testing / kill switch
+- Auto-connect on login
+- Transfer speed graphs / historical stats
+- Multi-user / per-user tunnel isolation
+
+### Alternatives
+
+| Alternative | Pros | Cons |
+|-------------|------|------|
+| [WireGuard Indicator](https://github.com/atareao/wireguard-indicator) (atareao) | ~46k downloads | Battery drain reports, no live stats, limited GNOME version support |
+| NetworkManager native | Zero-extension dependency | Doesn't use wg-quick configs, poor status visibility |
+| CLI (`wg-quick` script) | Full control | No GUI, requires terminal |
 
 ## Contributing
 
