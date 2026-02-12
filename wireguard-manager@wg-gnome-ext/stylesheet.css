@@ -1,5 +1,13 @@
 /* WireGuard Manager Extension Styles */
 
+/* Keep panel button compact */
+.panel-button.wireguard-manager-indicator {
+    padding-left: 3px;
+    padding-right: 3px;
+    -natural-hpadding: 3px;
+    -minimum-hpadding: 3px;
+}
+
 .wg-stats-label {
     font-family: monospace;
     font-size: 11px;

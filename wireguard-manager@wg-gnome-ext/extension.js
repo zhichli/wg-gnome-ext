@@ -25,12 +25,16 @@ class WireGuardIndicator extends PanelMenu.Button {
 
     _init() {
         super._init(0.0, 'WireGuard Manager');
+        this.add_style_class_name('wireguard-manager-indicator');
 
         this._settings = ExtensionUtils.getSettings(
             'org.gnome.shell.extensions.wireguard-manager');
 
         /* Panel icon – custom shield SVGs */
-        this._icon = new St.Icon({ style_class: 'system-status-icon' });
+        this._icon = new St.Icon({
+            style_class: 'system-status-icon',
+            icon_size: 16,
+        });
         this.add_child(this._icon);
         this._setIcon(false);
 
