@@ -1,6 +1,6 @@
 'use strict';
 
-/* WireGuard Manager – Preferences (GTK 4, GNOME 42+) */
+/* WireGuard Manager – Preferences (GTK 4, GNOME 42–45) */
 
 const { Gio, Gtk } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;

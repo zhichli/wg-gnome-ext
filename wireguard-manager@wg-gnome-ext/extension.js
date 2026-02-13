@@ -1,6 +1,6 @@
 'use strict';
 
-/* WireGuard Manager – GNOME Shell Extension (GNOME 42+)
+/* WireGuard Manager – GNOME Shell Extension (GNOME 42–45)
  *
  * Polls actual interface state via unprivileged `ip link`, so CLI usage
  * (wg-quick up/down) is reflected in the panel within one refresh cycle.
@@ -16,8 +16,6 @@ const MessageTray  = imports.ui.messageTray;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const HELPER_PATH = '/usr/local/bin/wg-manager-helper';
-
 /* ── Indicator ─────────────────────────────────────────────────────── */
 
 var WireGuardIndicator = GObject.registerClass(
@@ -26,6 +24,8 @@ class WireGuardIndicator extends PanelMenu.Button {
     _init() {
         super._init(0.0, 'WireGuard Manager');
         this.add_style_class_name('wireguard-manager-indicator');
+
+        this._helperPath = '/usr/local/bin/wg-manager-helper';
 
         this._settings = ExtensionUtils.getSettings(
             'org.gnome.shell.extensions.wireguard-manager');
@@ -330,7 +330,7 @@ class WireGuardIndicator extends PanelMenu.Button {
 
     _runHelper(args, callback) {
         this._runCommand(
-            ['pkexec', HELPER_PATH].concat(args), callback);
+            ['pkexec', this._helperPath].concat(args), callback);
     }
 
     /* ── Notifications ─────────────────────────────────────────────── */
@@ -362,7 +362,7 @@ class WireGuardIndicator extends PanelMenu.Button {
     }
 });
 
-/* ── Extension entry points ────────────────────────────────────────── */
+/* ── Extension entry points ──────────────────────────────────────────── */
 
 let indicator;
 

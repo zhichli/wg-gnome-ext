@@ -1,4 +1,5 @@
-/* WireGuard Manager Extension Styles */
+/* WireGuard Manager Extension Styles
+ * Needed for stats display – monospace font and indentation under each tunnel. */
 
 /* Keep panel button compact */
 .panel-button.wireguard-manager-indicator {
@@ -15,8 +16,4 @@
     padding-left: 24px;
     padding-top: 2px;
     padding-bottom: 4px;
-}
-
-.wg-transitioning {
-    opacity: 128;
 }
