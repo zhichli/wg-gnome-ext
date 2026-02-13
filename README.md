@@ -141,6 +141,27 @@ These are intentionally out of scope to keep the extension simple:
 4. Push (`git push origin feature/my-change`)
 5. Open a Pull Request
 
+## Releasing
+
+Releases are automated via GitHub Actions and triggered by pushing a version tag.
+
+```bash
+./release.sh      # bumps to next version (e.g. 1 → 2)
+./release.sh 5    # or specify a version explicitly
+```
+
+The script will bump `metadata.json`, commit, tag, and push. GitHub Actions then validates the version, builds the zip, and creates a release.
+
+<details>
+<summary>Manual steps (without script)</summary>
+
+1. Update `version` in `wireguard-manager@wg-gnome-ext/metadata.json` to the new number (e.g. `2`)
+2. Commit: `git commit -am "chore: bump version to 2"`
+3. Tag: `git tag v2`
+4. Push: `git push && git push --tags`
+
+</details>
+
 ## License
 
 [MIT](LICENSE) © Zhichao Li

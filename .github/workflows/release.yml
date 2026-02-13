@@ -1,0 +1,97 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Extract version
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"       # e.g. v2
+          VERSION="${TAG#v}"             # e.g. 2
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validate metadata.json version
+        run: |
+          EXPECTED="${{ steps.version.outputs.version }}"
+          ACTUAL=$(jq '.version' wireguard-manager@wg-gnome-ext/metadata.json)
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "::error::metadata.json version ($ACTUAL) does not match tag ($EXPECTED). Update metadata.json before tagging."
+            exit 1
+          fi
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          # Find the previous tag
+          PREV_TAG=$(git tag --sort=-v:refname | grep -E '^v[0-9]+$' | sed -n '2p')
+
+          if [ -z "$PREV_TAG" ]; then
+            RANGE="HEAD"
+          else
+            RANGE="${PREV_TAG}..HEAD"
+          fi
+
+          {
+            echo "changelog<<CHANGELOG_EOF"
+            echo "## ${TAG}"
+            echo ""
+
+            FEATS=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^feat" -i 2>/dev/null)
+            FIXES=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^fix" -i 2>/dev/null)
+            OTHERS=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^feat" --grep="^fix" --invert-grep -i 2>/dev/null)
+
+            if [ -n "$FEATS" ]; then
+              echo "### Features"
+              echo "$FEATS"
+              echo ""
+            fi
+
+            if [ -n "$FIXES" ]; then
+              echo "### Bug Fixes"
+              echo "$FIXES"
+              echo ""
+            fi
+
+            if [ -n "$OTHERS" ]; then
+              echo "### Other Changes"
+              echo "$OTHERS"
+              echo ""
+            fi
+
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Compile schemas
+        run: |
+          sudo apt-get update && sudo apt-get install -y libglib2.0-bin
+          glib-compile-schemas wireguard-manager@wg-gnome-ext/schemas/
+
+      - name: Build extension zip
+        uses: thedoctor0/zip-release@0.7.6
+        with:
+          type: zip
+          filename: ../wireguard-manager@wg-gnome-ext.zip
+          directory: wireguard-manager@wg-gnome-ext
+          exclusions: '*.git* *.md'
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Version ${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          files: wireguard-manager@wg-gnome-ext.zip
+          generate_release_notes: false
